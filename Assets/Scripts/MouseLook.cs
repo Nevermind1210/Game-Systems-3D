@@ -39,7 +39,7 @@ namespace Debugging.Player
             }
             else
             {
-                _rotY += Input.GetAxis("MouseY")  * sensitivity * Time.deltaTime;
+                _rotY += Input.GetAxis("Mouse Y")  * sensitivity * Time.deltaTime;
                 _rotY = Mathf.Clamp(_rotY,minY,maxY);
                 transform.localEulerAngles = new Vector3(-_rotY,(float)0.0);
             }

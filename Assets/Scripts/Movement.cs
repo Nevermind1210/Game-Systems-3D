@@ -11,9 +11,11 @@ namespace Debugging.Player
         private float _gravity = 20.0f;
         private Vector3 _moveDir;
         CharacterController _charC;
+        private Animator characterAnim;
         private void Start()
         {
             _charC = GetComponent<CharacterController>();
+            characterAnim = GetComponentInChildren<Animator>();
         }
         private void Update()
         {
@@ -21,6 +23,9 @@ namespace Debugging.Player
         }
         private void Move()
         {
+            Vector2 ctrlVector = new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"));
+
+            characterAnim.SetBool("moving", ctrlVector.magnitude >= .05f);
             if (_charC.isGrounded)
             {
                 if (Input.GetButton("Sprint"))
@@ -34,8 +39,9 @@ namespace Debugging.Player
                 else
                 {
                     moveSpeed = walkSpeed;
+                    characterAnim.SetFloat("speed", 1);
                 }
-                _moveDir = transform.TransformDirection(new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")) * moveSpeed); 
+                _moveDir = transform.TransformDirection(new Vector3(ctrlVector.x, 0, ctrlVector.y)); 
                 if (Input.GetButton("Jump"))
                 {
                     _moveDir.y = jumpHeight;
