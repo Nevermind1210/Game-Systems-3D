@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using TMPro;
+
 public class DialougeManager : MonoBehaviour
 {
     [SerializeField] GameObject buttonPrefab;
     [SerializeField] Transform buttonPanel;
 
-    GameObject dialougeParent;
-   
+    [SerializeField] GameObject dialougeParent;
+
+    [SerializeField] TextMeshProUGUI responseText;
 
     public static DialougeManager theManager;
     Dialougue currentDialouge;
 
     private void Awake()
     {
-        dialougeParent = transform.Find("Scroll View").gameObject;
+        //dialougeParent = transform.Find("Scroll View").gameObject;
         dialougeParent.SetActive(false);
 
         if (theManager == null)
@@ -33,6 +36,7 @@ public class DialougeManager : MonoBehaviour
     {
         Button spawnedButton;
         dialougeParent.SetActive(true);
+        currentDialouge = dialougue;
         CleanUpButtons();
         int i = 0;
         foreach (LineOfDialouge item in dialougue.dialougeOptions)
@@ -50,18 +54,41 @@ public class DialougeManager : MonoBehaviour
         spawnedButton.GetComponentInChildren<Text>().text = dialougue.goodbye.topic;
         spawnedButton.onClick.AddListener(EndConversation);
 
+        DisplayResponse(currentDialouge.greeting);
     }
 
     void EndConversation()
     {
-        print(currentDialouge.goodbye.response);
         CleanUpButtons();
         dialougeParent.SetActive(false);
+
+        DisplayResponse(currentDialouge.goodbye.response);
+
+        if(currentDialouge.goodbye.nextDialogue != null)
+        {
+            LoadDialouge(currentDialouge.goodbye.nextDialogue);
+        }    
+        else
+        {
+            transform.GetChild(0).gameObject.SetActive(false);
+        }    
     }
 
     void ButtonClicked(int dialougeNum)
     {
-        print(currentDialouge.dialougeOptions[dialougeNum].response);
+        if(currentDialouge.dialougeOptions[dialougeNum].nextDialogue != null)
+        {
+            LoadDialouge(currentDialouge.dialougeOptions[dialougeNum].nextDialogue);
+        }
+        {
+
+            DisplayResponse(currentDialouge.dialougeOptions[dialougeNum].response);
+        }
+    }
+
+    private void DisplayResponse(string response)
+    {
+        responseText.text = response;
     }
 
     void CleanUpButtons()
@@ -71,10 +98,5 @@ public class DialougeManager : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
-     
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
+
 }
