@@ -5,7 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class Factions
 {
-    float _approval;
+    public string factionName;
+    [SerializeField,Range(-1,1)] float _approval;
 
     public float approval
     {
@@ -18,12 +19,17 @@ public class Factions
             return _approval;
         }
     } 
+
+    public Factions(float initialApproval)
+    {
+        approval = initialApproval;
+    }
 }
 
 public class FactionsManager : MonoBehaviour
 {
     Dictionary<string, Factions> factions;
-
+    [SerializeField] List<Factions> initialiseFactions;
     public static FactionsManager instance;
     private void Awake()
     {
@@ -37,11 +43,14 @@ public class FactionsManager : MonoBehaviour
         }
 
         factions = new Dictionary<string, Factions>();
-        factions.Add("Clan", new Factions());
+        foreach (Factions faction in initialiseFactions)
+        {
+            factions.Add(faction.factionName, faction);
+        }
     }
 
     // float ? makes it nulliable variable
-    float? factionsApproval(string factionName, float value)
+    public float? FactionsApproval(string factionName, float value)
     {
         if(factions.ContainsKey(factionName))
         {
@@ -51,7 +60,7 @@ public class FactionsManager : MonoBehaviour
         return null;
     }
 
-    float? getFactionsApproval(string factionName)
+    public float? FactionsApproval(string factionName)
     {
         if (factions.ContainsKey(factionName))
         {

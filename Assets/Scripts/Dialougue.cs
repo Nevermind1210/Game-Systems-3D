@@ -5,11 +5,11 @@ using UnityEngine;
 public class Dialougue : MonoBehaviour
 {
     public string greeting;
-    public FactionsManager factionsOption;
+    public string faction;
     public LineOfDialouge goodbye;
     public LineOfDialouge[] dialougeOptions;
-    public bool firstDialogue;
 
+    public bool firstDialogue;
 
     private void Update()
     {

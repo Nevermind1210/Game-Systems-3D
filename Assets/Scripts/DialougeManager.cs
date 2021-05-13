@@ -41,11 +41,13 @@ public class DialougeManager : MonoBehaviour
         int i = 0;
         foreach (LineOfDialouge item in dialougue.dialougeOptions)
         {
-            spawnedButton = Instantiate(buttonPrefab,buttonPanel).GetComponent<Button>();
-            spawnedButton.GetComponentInChildren<Text>().text = item.topic;
+            {
+                spawnedButton = Instantiate(buttonPrefab, buttonPanel).GetComponent<Button>();
+                spawnedButton.GetComponentInChildren<Text>().text = item.topic;
 
-            int j = i;
-            spawnedButton.onClick.AddListener(delegate { ButtonClicked(j); });
+                int j = i;
+                spawnedButton.onClick.AddListener(delegate { ButtonClicked(j); });
+            }
             i++;
         }
 
@@ -76,6 +78,8 @@ public class DialougeManager : MonoBehaviour
 
     void ButtonClicked(int dialougeNum)
     {
+        FactionsManager.instance.FactionsApproval(currentDialouge.faction, currentDialouge.dialougeOptions[dialougeNum].changeApproval);
+
         if(currentDialouge.dialougeOptions[dialougeNum].nextDialogue != null)
         {
             LoadDialouge(currentDialouge.dialougeOptions[dialougeNum].nextDialogue);
