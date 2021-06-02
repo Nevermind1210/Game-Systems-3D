@@ -25,7 +25,7 @@ namespace Debugging.Player
         {
             Vector2 ctrlVector = new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"));
 
-            characterAnim.SetBool("moving", ctrlVector.magnitude >= .05f);
+            characterAnim.SetBool("Moving", ctrlVector.magnitude >= .05f);
             if (_charC.isGrounded)
             {
                 if (Input.GetButton("Sprint"))
