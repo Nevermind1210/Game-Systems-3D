@@ -1,6 +1,7 @@
+using Inventory;
 using UnityEngine;
 
-namespace Player
+namespace Inventory
 {
    [System.Serializable]
    public class EquipmentItem : Items

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
-namespace Player
+namespace Inventory
 {
     [System.Serializable]
     public class Items
@@ -24,7 +24,7 @@ namespace Player
 
         #region Private varibles
 
-        [SerializeField] private string name;
+        [SerializeField] private string name; //Item's ID
         [SerializeField] private string description;
         [SerializeField] private int value;
         [SerializeField] private int amount;
@@ -34,9 +34,6 @@ namespace Player
         [SerializeField] private int damage;
         [SerializeField] private int armour;
         [SerializeField] private int heal;
-        [SerializeField] private Player.EquipmentSlot slot;
-        private PlayerInventory player;
-
         #endregion
 
         #region Public properties
@@ -108,7 +105,7 @@ namespace Player
 
         }
 
-        public Items(Items copyItem, int copyAmount)
+        public Items(Items copyItem, int copyAmount) //overloads 
         {
             Name = copyItem.Name;
             Description = copyItem.Description;

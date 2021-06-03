@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-//Errors : 17
-namespace Debugging.Player
+
+namespace Player
 {
     [AddComponentMenu("RPG/Player/Mouse Look")]
     public class MouseLook : MonoBehaviour
