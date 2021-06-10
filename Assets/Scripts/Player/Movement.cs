@@ -9,7 +9,8 @@ namespace Player
         [Header("Character")] [SerializeField] private CharacterController controller;
         [SerializeField] private Transform cam;
 
-        [Header("Variables")] [SerializeField] private float gravity = -140f;
+        [Header("Variables")] 
+        [SerializeField] private float gravity = -140f;
         [SerializeField] private float yVelocity;
         [SerializeField] private float turnSmoothTime = 0.1f; //how fast we turn
         [SerializeField] private float speed = 6f;
@@ -23,7 +24,6 @@ namespace Player
                              Jump()) * Time.deltaTime);
 
             Interact();
-
         }
 
         void Interact()

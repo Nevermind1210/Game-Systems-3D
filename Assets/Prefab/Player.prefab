@@ -972,7 +972,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8464078126331922511}
   - component: {fileID: 8464078126331922509}
-  - component: {fileID: 8464078126331922508}
   m_Layer: 0
   m_Name: MiniMap Camera
   m_TagString: Untagged
@@ -1037,14 +1036,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &8464078126331922508
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8464078126331922510}
-  m_Enabled: 1
 --- !u!1 &8464078126747832619
 GameObject:
   m_ObjectHideFlags: 0
@@ -1426,11 +1417,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f06aa52e71cfe3479d15061e3b04811, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  walkSpeed: 50
-  runSpeed: 100
-  crouchSpeed: 5
-  jumpHeight: 5
+  controller: {fileID: 0}
+  cam: {fileID: 0}
+  gravity: -140
+  yVelocity: 0
+  turnSmoothTime: 0.1
+  speed: 6
+  jumpSpeed: 40
 --- !u!114 &8464078128034187670
 MonoBehaviour:
   m_ObjectHideFlags: 0
