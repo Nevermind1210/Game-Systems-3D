@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Faction;
 using TMPro;
 
 namespace Dialouge
@@ -11,9 +11,7 @@ namespace Dialouge
     {
         [SerializeField] GameObject buttonPrefab;
         [SerializeField] Transform buttonPanel;
-
         [SerializeField] GameObject dialougeParent;
-
         [SerializeField] TextMeshProUGUI responseText;
 
         public static DialougeManager theManager;
@@ -87,7 +85,6 @@ namespace Dialouge
                 LoadDialouge(currentDialouge.dialougeOptions[dialougeNum].nextDialogue);
             }
             {
-
                 DisplayResponse(currentDialouge.dialougeOptions[dialougeNum].response);
             }
         }

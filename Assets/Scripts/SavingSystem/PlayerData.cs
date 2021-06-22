@@ -7,18 +7,18 @@ namespace Saving
 {
     public class PlayerData
     {
-        public int level;
+        private int level;
 
         public float[] rotation;
         public float[] position;
 
-        public Stats strength;
-        public Stats dexterity;
-        public Stats constitution;
-        public Stats wisdom;
-        public Stats intelligence;
-        public Stats charisma;
-        public Stats empathy;
+        private Stats strength;
+        private Stats dexterity;
+        private Stats constitution;
+        private Stats wisdom;
+        private Stats intelligence;
+        private Stats charisma;
+        private Stats empathy;
 
         public PlayerData(Transform playerTransform, PlayerStats playerStats)
         {

@@ -2,70 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class Factions
+namespace Faction
 {
-    public string factionName;
-    [SerializeField,Range(-1,1)] float _approval;
-
-    public float approval
+    public class FactionsManager : MonoBehaviour
     {
-        set
+        Dictionary<string, Factions> factions;
+        [SerializeField] List<Factions> initialiseFactions;
+        public static FactionsManager instance;
+        private void Awake()
         {
-            _approval = Mathf.Clamp(value, -1, 1);
-        }
-        get
-        {
-            return _approval;
-        }
-    } 
+            if(instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
 
-    public Factions(float initialApproval)
-    {
-        approval = initialApproval;
-    }
-}
-
-public class FactionsManager : MonoBehaviour
-{
-    Dictionary<string, Factions> factions;
-    [SerializeField] List<Factions> initialiseFactions;
-    public static FactionsManager instance;
-    private void Awake()
-    {
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
+            factions = new Dictionary<string, Factions>();
+            foreach (Factions faction in initialiseFactions)
+            {
+                factions.Add(faction.factionName, faction);
+            }
         }
 
-        factions = new Dictionary<string, Factions>();
-        foreach (Factions faction in initialiseFactions)
+        // float ? makes it nulliable variable
+        public float? FactionsApproval(string factionName, float value)
         {
-            factions.Add(faction.factionName, faction);
+            if(factions.ContainsKey(factionName))
+            {
+                factions[factionName].approval += value;
+                return factions[factionName].approval;
+            }
+            return null;
         }
-    }
 
-    // float ? makes it nulliable variable
-    public float? FactionsApproval(string factionName, float value)
-    {
-        if(factions.ContainsKey(factionName))
+        public float? FactionsApproval(string factionName)
         {
-            factions[factionName].approval += value;
-            return factions[factionName].approval;
+            if (factions.ContainsKey(factionName))
+            {
+                return factions[factionName].approval;
+            }
+            return null;
         }
-        return null;
-    }
-
-    public float? FactionsApproval(string factionName)
-    {
-        if (factions.ContainsKey(factionName))
-        {
-            return factions[factionName].approval;
-        }
-        return null;
     }
 }
