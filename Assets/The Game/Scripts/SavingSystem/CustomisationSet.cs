@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Saving;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -120,7 +121,7 @@ public class CustominsationSet : MonoBehaviour
 
    public void SavePlayer()
    {
-      SaveSystem.SavePlayer(this); // todo SaveSystem
+      SaveSystem.SavePlayer(this);
       Debug.Log("Saved Character!!");
       SceneManager.LoadScene("Loading Screen");
    }

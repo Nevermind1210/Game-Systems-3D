@@ -1,224 +1,200 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Saving;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 namespace Player
 {
     public class PlayerStats : MonoBehaviour
     {
-        [SerializeField] private PlayerProfession[] playerProfessions;
+        public static PlayerStats CoolPlayerStats;
+        
+        [Header("Name")]
+        public string characterName;
+        [SerializeField] private TMP_Text nameText;
 
-        private PlayerProfession _profession;
-        public PlayerProfession Profession
-        {
-            get { return _profession; }
-            set 
-            { 
-                _profession = value;
-                strength.defaultStat        = _profession.strength;
-                dexterity.defaultStat       = _profession.dexterity;
-                constitution.defaultStat    = _profession.constitution;
-                wisdom.defaultStat          = _profession.wisdom;
-                intelligence.defaultStat    = _profession.intelligence;
-                charisma.defaultStat        = _profession.charisma;
-                empathy.defaultStat         = _profession.empathy;
-                UpdateStats();
-            }
-        }
+        [Header("Class")]
+        public int classIndex;
+        public string className;
 
+        [Header("Race")]
+        public int raceIndex;
+        public string raceName;
 
-        public enum BaseStats { Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma,
-            Empathy
-        };
+        [SerializeField] private TMP_Text description;
+        [SerializeField] private TMP_Text level;    
+        public int levelInt;
 
-        public int level;
-        public int pointPool = 5;
-
-        [Header("Base Stats")]
-        public Stats strength;        //Health + Health regen
-        public Stats dexterity;      //Movement Speed
-        public Stats constitution;   //Stamina + Stamina regen
-        public Stats wisdom;         //Mana pool + Mana regen
-        public Stats intelligence;   //Spell casting damage
-        public Stats charisma;       //Personality  
-        public Stats empathy;        //Sense feelings
-
-        [Header("Health")]
-        public float maxHealth; //class Base Health + (strength * 0.5f);
-        public float currentHealth;
-        public float healthRegen;
-
+        [Header ("Health")]
+        [SerializeField] private Slider healthSlider;
+        [SerializeField] private TMP_Text healthText;
+        public int healthMax;
+        public float health;
+        public int healthRegen;
+    
         [Header("Mana")]
-        public float maxMana;
-        public float currentMana;
-        public float manaRegen;
+        [SerializeField] private Slider manaSlider;
+        [SerializeField] private TMP_Text manatext;
+        public int manaMax;
+        public float mana;
+        public int manaRegen;
 
-        [Header("Movement")]
-        public float movementSpeed;
-        public float sprintSpeed;
-        public float crouchSpeed;
-        public float jump;
-        public float maxStamina;
-        public float currentStamina;
-        public float staminaRegen;
+        [Header("Damage UI")]
+        [SerializeField] private Transform popUpLocation;
+        [SerializeField] private GameObject damagePrefab;
+        [SerializeField] private TMP_Text damageText;
+        [SerializeField] private float damage = 5f;
+        
+        [Header("Death UI")]
+        [SerializeField] private GameObject deathPanel;
+        [SerializeField] private AudioSource deathSound;
+        private bool isDead = false;
 
-        private void UpdateStats()
+        private void Awake()
         {
-            maxHealth = strength.totalStat * 6;
-            healthRegen = strength.totalStat * 0.1f;
-
-            maxMana = wisdom.totalStat * 4;
-            manaRegen = wisdom.totalStat * 0.1f;
-
-            movementSpeed = dexterity.defaultStat * 10;
-        }
-
-        public Stats EnumToStats(BaseStats baseStats)
-        {
-            switch (baseStats)
+            if (CoolPlayerStats == null)
             {
-                case BaseStats.Strength:
-                    return strength;
-                case BaseStats.Dexterity:
-                    return dexterity;
-                case BaseStats.Constitution:
-                    return constitution;
-                case BaseStats.Wisdom:
-                    return wisdom;
-                case BaseStats.Intelligence:
-                    return intelligence;
-                case BaseStats.Charisma:
-                    return charisma;
-                case BaseStats.Empathy:
-                    return empathy;
+                CoolPlayerStats = this;
             }
-            return new Stats();
-        }
-
-        public bool ChangeStats(BaseStats baseStat, int amount)
-        {
-            Stats stats = EnumToStats(baseStat);
-
-            if (amount > 0 && pointPool - amount < 0)
+            else
             {
-                return false;
-            }
-            else if (amount < 0 && stats.pooledStat + amount < 0)
-            {
-                return false;
-            }
-            stats.pooledStat += amount;
-            pointPool -= amount;
-            return true;
-        }
-
-        private void OnGUI()
-        {
-            StatsOnGUI();
-            ProfessionOnGUI();
-            SaveOnGUI();
-        }
-
-        private void SaveOnGUI()
-        {
-            // if(GUI.Button(new Rect(150,10,100,20),"Save"))
-            // {
-            //     PlayerBinary.SavePlayerData(transform, this);
-            // }
-            //
-            // if (GUI.Button(new Rect(150, 40, 100, 20), "Load"))
-            // {
-            //     PlayerData playerData =  PlayerBinary.LoadPlayerData(transform, this);
-            // }
-        }
-
-
-        Vector2 scrollPosition;
-        private void ProfessionOnGUI()
-        {
-            float currentY = Screen.height * 0.5f;
-
-            GUI.Box(new Rect(Screen.width - 170, currentY, 155, 80), "Profession");
-
-            currentY += 20;
-            scrollPosition = GUI.BeginScrollView(new Rect(Screen.width -170, currentY,155,50)
-                , scrollPosition
-                , new Rect(0,0,100,30 * playerProfessions.Length));
-
-            currentY = 0;
-            foreach (PlayerProfession profession in playerProfessions)
-            {
-                if(GUI.Button(new Rect(20, currentY,100,20),profession.ProfessionName))
-                {
-                    Profession = profession;
-                }
-                currentY += 30;
-            }
-
-            GUI.EndScrollView();
-
-            if (_profession != null)
-            {
-                GUI.Box(new Rect(Screen.width - 170, Screen.height - 110, 155, 100), "Profession");
-                GUI.Label(new Rect(Screen.width - 140, Screen.height - 120 + 30, 100, 20), _profession.ProfessionName);
-                GUI.Label(new Rect(Screen.width - 140, Screen.height - 120 + 45, 100, 20), _profession.AbilityName);
-
-                GUIStyle newStyle = new GUIStyle();
-                newStyle.wordWrap = true;
-                newStyle.normal.textColor = Color.white;
-                GUI.Label(new Rect(Screen.width - 140, Screen.height - 120 + 65, 100, 60), _profession.AbilityDescription, newStyle);
+                Destroy(this);
             }
         }
 
-        private void StatsOnGUI()
+
+        private void Start()
         {
-            float currentY = 40;
+            SetValues();
+            ClassName(classIndex);
 
-            GUI.Box(new Rect(Screen.width - 170, 10, 155, 210), "Stats Pool : " + pointPool);
-
-            foreach (BaseStats baseStats in Enum.GetValues(typeof(BaseStats)))
-            {
-                Stats stats = EnumToStats(baseStats);
-
-                if (GUI.Button(new Rect(Screen.width - 165, currentY, 20, 20), "-"))
-                {
-                    ChangeStats(baseStats, -1);
-                }
-                GUI.Label(new Rect(Screen.width - 140, currentY, 100, 20), baseStats.ToString() + " :" + stats.totalStat);
-                if (GUI.Button(new Rect(Screen.width - 40, currentY, 20, 20), "+"))
-                {
-                    ChangeStats(baseStats, 1);
-                }
-                currentY += 30;
-            }
+            description.text = raceName + " " + className;        
+            nameText.text = characterName;
+            deathPanel.SetActive(false);
+            isDead = false;
         }
 
-        public void StatUp(string name)
+        private void Update()
         {
-            BaseStats stat = (BaseStats) Enum.Parse(typeof(BaseStats), name);
+            UseMana();  
+            UpdateSliders();
+            GetHurt();
+            LevelUp();
+        }
 
-            ChangeStats(stat, 1);
+        #region PlayerVisuals
 
         
-        }
-    }
-}
 
-[System.Serializable]
-public class Stats
-{
-    //string statName;
-    public int defaultStat;
-    public int pooledStat;
-
-    public int totalStat
-    {
-        get
+        #endregion
+        private void LevelUp()
         {
-            return defaultStat + pooledStat;
+            if (Input.GetButtonDown("LevelUp"))
+            {
+                levelInt++;
+                healthMax += Mathf.RoundToInt(healthMax * 0.55f);
+                manaMax += Mathf.RoundToInt(manaMax * 0.55f);
+                level.text = "Level:" + levelInt;
+            }
         }
 
+        private void GetHurt()
+        {
+            if (Input.GetButtonDown("Damage"))
+            {
+                health -= damage;
+                GameObject popUp = Instantiate(damagePrefab, popUpLocation);
+                damageText = popUp.GetComponentInChildren<TMP_Text>();
+                damageText.text = damage.ToString("0");            
+                Destroy(popUp, .5f);
+            }
+            if(health < healthMax)
+            {
+                health += (healthRegen*0.1f) * Time.deltaTime;
+            }
+        
+            if (health <= 0)
+            {
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            if (!isDead)
+            {
+                deathSound.Play();
+                Debug.Log("Oh no I killed myself... why.... aaa....no...");
+                deathPanel.SetActive(true);
+                isDead = true;
+            }        
+        }
+        
+        // Send feedback to the player that things are regenerating.
+        private void UpdateSliders()
+        {
+            healthSlider.maxValue = healthMax;
+            healthSlider.value = health;
+            healthText.text = "Health: " + Mathf.RoundToInt(health) + "/" + healthMax;
+
+            manaSlider.maxValue = manaMax;
+            manaSlider.value = mana;
+            manatext.text = "Mana: " + Mathf.RoundToInt(mana) + "/" + manaMax;
+        }
+        
+        //Literally does nothing... But its nifty!
+        private void UseMana()
+        {
+            if (Input.GetButton("Cast") && mana > 0)
+            {
+                mana -= Time.deltaTime;
+            }
+            if(mana < manaMax && !Input.GetButton("Cast"))
+            {
+                mana += (manaRegen * 0.1f) * Time.deltaTime;
+            }
+        }
+
+        #region ValuesSets
+
+        private void ClassName(int i)
+        {
+            switch (i)
+            {
+                case 0:
+                    className = "Barbarian";
+                    break;
+                case 1:
+                    className = "Ranger";
+                    break;
+                case 2:
+                    className = "Mage";
+                    break;
+            }
+        }
+
+        public void SetValues()
+        {
+            characterName = CostominsationGet.characterName;
+            classIndex = CostominsationGet.classIndex;
+            raceIndex = CostominsationGet.raceIndex;
+            raceName = CostominsationGet.raceName;
+
+            levelInt = CostominsationGet.level;
+            level.text = "Level: " + levelInt;
+            healthMax = CostominsationGet.healthMax;
+            health = healthMax;
+            healthRegen = CostominsationGet.healthRegen;
+            healthSlider.maxValue = healthMax;
+            manaMax = CostominsationGet.manaMax;
+            mana = manaMax;
+            manaRegen = CostominsationGet.manaRegen;
+            manaSlider.maxValue = manaMax;
+        }
+
+        #endregion
+        
+
+   
     }
 }
