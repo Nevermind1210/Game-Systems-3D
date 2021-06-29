@@ -15,6 +15,7 @@ public class OptionMenu : MonoBehaviour
     [Header("Resolution Set")]
     public TMP_Dropdown resolutionDropdown;
     Resolution[] resolutions;
+    public Toggle fullscreenToggle;
     
     [Header("Quality Set")]
     public TMP_Dropdown qualityDropdown;
@@ -58,18 +59,29 @@ public class OptionMenu : MonoBehaviour
         LoadSettings(currentResolutionIndex);
     }
 
+    #region Volume Stuff
+
     public void SetMasterVolume(float volume)
     {
-        audioMixer.SetFloat("Volume", volume);
-        currentVolume = volume;
+        PlayerPrefs.SetFloat("MasterVolume", volume);
+        volume = VolumeRemapping(volume);
         audioMixer.SetFloat("masterVolume",volume);
     }
 
     public void SFXVolume(float volume)
     {
         PlayerPrefs.SetFloat("SFXVolume",volume);
-                
+        volume = VolumeRemapping(volume);
+        audioMixer.SetFloat("SFXVoume", volume);
     }
+
+    private float VolumeRemapping(float _value)
+    {
+        return -40 + (_value - 0) * (20 - -40) / (1 - 0);
+    }
+
+    #endregion
+   
 
     public void SetFullScreen(bool isFullscreen)
     {

@@ -175,20 +175,20 @@ namespace Player
 
         public void SetValues()
         {
-            characterName = CostominsationGet.characterName;
-            classIndex = CostominsationGet.classIndex;
-            raceIndex = CostominsationGet.raceIndex;
-            raceName = CostominsationGet.raceName;
+            characterName = CustomisationGet.characterName;
+            classIndex = CustomisationGet.classIndex;
+            raceIndex = CustomisationGet.raceIndex;
+            raceName = CustomisationGet.raceName;
 
-            levelInt = CostominsationGet.level;
+            levelInt = CustomisationGet.level;
             level.text = "Level: " + levelInt;
-            healthMax = CostominsationGet.healthMax;
+            healthMax = CustomisationGet.healthMax;
             health = healthMax;
-            healthRegen = CostominsationGet.healthRegen;
+            healthRegen = CustomisationGet.healthRegen;
             healthSlider.maxValue = healthMax;
-            manaMax = CostominsationGet.manaMax;
+            manaMax = CustomisationGet.manaMax;
             mana = manaMax;
-            manaRegen = CostominsationGet.manaRegen;
+            manaRegen = CustomisationGet.manaRegen;
             manaSlider.maxValue = manaMax;
         }
 

@@ -5,7 +5,7 @@ using Player;
 using Saving;
 using UnityEngine;
 
-public class CostominsationGet : MonoBehaviour
+public class CustomisationGet : MonoBehaviour
 {
     [Header("Character Properties")]
     [SerializeField] private Renderer characterRenderer;

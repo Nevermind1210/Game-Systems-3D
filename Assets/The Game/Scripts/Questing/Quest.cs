@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Plr;
 using UnityEngine;
 
 namespace Quests
 {
     public enum QuestStage
     {
-        Locked,
+        Locked, 
         Unlocked,
         InProgress,
         RequirementsMet,
@@ -22,7 +23,8 @@ namespace Quests
         public QuestRewards reward;
 
         public QuestStage stage;
-        
+
+        public int requiredLevel;
         [Tooltip("The title of the previous quests in the chain.")]
         public string previousQuest;
         [Tooltip("The title of the quests to be unlocked.")]
@@ -34,7 +36,9 @@ namespace Quests
     [System.Serializable]
     public struct QuestRewards
     {
+        public Item rewardItem;
         public float experience;
         public int gold;
+        public float factionsIncrease;
     }
 }

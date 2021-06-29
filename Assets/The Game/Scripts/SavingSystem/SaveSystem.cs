@@ -64,7 +64,7 @@ namespace Saving
         }
 
         // Basically grabbing the data inside the game as its stands.
-        public static void SavePlayerInGame(PlayerStats playerStats, Movement movement, CostominsationGet _data)
+        public static void SavePlayerInGame(PlayerStats playerStats, Movement movement, CustomisationGet _data)
         {
             BinaryFormatter formatter = new BinaryFormatter();
             string path = Application.persistentDataPath + "/PlayerData.save";

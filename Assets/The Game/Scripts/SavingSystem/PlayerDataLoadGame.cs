@@ -20,7 +20,7 @@ public class PlayerDataLoadGame
 
     public int[] visual;
     
-    public PlayerDataLoadGame(PlayerStats player, Movement movement,CostominsationGet data)
+    public PlayerDataLoadGame(PlayerStats player, Movement movement,CustomisationGet data)
     {
 
         name = player.characterName;
