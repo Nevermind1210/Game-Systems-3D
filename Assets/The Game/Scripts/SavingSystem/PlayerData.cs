@@ -19,9 +19,9 @@ namespace Saving
         public int[] visual;
     
         // We do be saving this
-        public PlayerData (CustominsationSet player)
+        public PlayerData (CustomizationSet player)
         {
-            name = player.playerName;
+            name = player.characterName;
             classIndex = player.selectedClassIndex;
             raceIndex = player.raceIndex;
             raceName = player.raceName;

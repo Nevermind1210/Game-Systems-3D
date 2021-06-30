@@ -8,7 +8,7 @@ namespace Saving
     public static class SaveSystem
     {
         // This functions serves to be called and to save whatever data inside PlayerData. Used after customisation and New Game
-        public static void SavePlayer(CustominsationSet player)
+        public static void SavePlayer(CustomizationSet player)
         {
             BinaryFormatter formatter = new BinaryFormatter();
             string path = Application.persistentDataPath + "/PlayerData.save";

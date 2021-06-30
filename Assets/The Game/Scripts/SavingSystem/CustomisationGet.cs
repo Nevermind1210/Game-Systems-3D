@@ -1,13 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Player;
 using Saving;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
+using TMPro;
 public class CustomisationGet : MonoBehaviour
 {
-    [Header("Character Properties")]
+   [Header("Character Properties")]
     [SerializeField] private Renderer characterRenderer;
     [SerializeField] public GameObject player;
 
@@ -32,39 +32,44 @@ public class CustomisationGet : MonoBehaviour
     [Header("Visual Textures")]
     public int[] visual = new int[6];
 
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
+        // Testing Which load function to run based on bool from main menu
         if (!OptionMenu.loadData)
         {
             Load();
         }
-        else
+        else if (OptionMenu.loadData)
         {
-            LoadInsideGame();
+            LoadInGame();
         }
     }
 
+    /// <summary>
+    /// Loads all the saved player data from the customisation scene
+    /// </summary>
     public void Load()
     {
-        PlayerData playerData = SaveSystem.LoadPlayer();
-        visual[0] = playerData.visual[0];
-        visual[1] = playerData.visual[1];
-        visual[2] = playerData.visual[2];
-        visual[3] = playerData.visual[3];
-        visual[4] = playerData.visual[4];
-        visual[5] = playerData.visual[5];
+        PlayerData data = SaveSystem.LoadPlayer();
+        visual[0] = data.visual[0];
+        visual[1] = data.visual[1];
+        visual[2] = data.visual[2];
+        visual[3] = data.visual[3];
+        visual[4] = data.visual[4];
+        visual[5] = data.visual[5];
         
-        characterName = playerData.name;
-        classIndex = playerData.classIndex;
-        raceIndex = playerData.raceIndex;
-        raceName = playerData.raceName;
+        characterName = data.name;
+        classIndex = data.classIndex;
+        raceIndex = data.raceIndex;
+        raceName = data.raceName;
 
-        healthMax = playerData.stats[0];
-        healthRegen = playerData.stats[1];
-        speed = playerData.stats[2];
-        stamina = playerData.stats[3];
-        manaMax = playerData.stats[4];
-        manaRegen = playerData.stats[5];
+        healthMax = data.stats[0];
+        healthRegen = data.stats[1];
+        speed = data.stats[2];
+        stamina = data.stats[3];
+        manaMax = data.stats[4];
+        manaRegen = data.stats[5];
 
         SetTexture("skin", visual[0]);
         SetTexture("eyes", visual[1]);
@@ -72,11 +77,23 @@ public class CustomisationGet : MonoBehaviour
         SetTexture("hair", visual[3]);
         SetTexture("armour", visual[4]);
         SetTexture("clothes", visual[5]);
+
     }
 
-    public void LoadInsideGame()
+    /// <summary>
+    /// This saves all the updated information from the game
+    /// </summary>
+    public void SaveInGame()
     {
-        
+        SaveSystem.SavePlayerInGame(playerStats, Movement._movement , this);
+        Debug.Log("Saved In Game");
+    }
+
+    /// <summary>
+    /// This loads all the In game saved information and then updates the relevent scripts
+    /// </summary>
+    public void LoadInGame()
+    {
         PlayerDataLoadGame data = SaveSystem.LoadInGame();
 
         SetTexture("skin", data.visual[0]);
@@ -98,10 +115,12 @@ public class CustomisationGet : MonoBehaviour
         manaMax = data.manaMax;
         manaRegen = data.manaRegen;
 
+        //Debug.Log(speed); // I was debugging why the speed variable was not loading correctly. See Movement Journal.
+
         playerStats.SetValues();
         Movement._movement.SetStamValues();
     }
-
+    
     void SetTexture(string type, int index)
     {
         Texture2D texture = null;
@@ -139,3 +158,4 @@ public class CustomisationGet : MonoBehaviour
         characterRenderer.materials = mats;
     }
 }
+

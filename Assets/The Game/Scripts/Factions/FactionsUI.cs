@@ -14,7 +14,7 @@ namespace Faction
         private void Update()
         {
             minuteMenApproval = (float) FactionsManager.instance.FactionsApproval("Minute Men");
-            minuteMenApprovalText.text = "Minute Men Faction Approval: " + vibesApproval.ToString();
+            minuteMenApprovalText.text = "Minute Men Faction Approval: " + minuteMenApproval.ToString();
             
             vibesApproval = (float) FactionsManager.instance.FactionsApproval("Vibes");
             vibesMenApprovalText.text = "Vibes Faction Approval: " + vibesApproval.ToString();
