@@ -14,13 +14,20 @@ namespace Dialouge
         [SerializeField] GameObject dialougeParent;
         [SerializeField] TextMeshProUGUI responseText;
 
+        public static bool isTalking;
+        
         public static DialougeManager theManager;
+
+        GameObject dialouguePanel;
+        
         Dialougue currentDialouge;
 
         private void Awake()
         {
-            //dialougeParent = transform.Find("Scroll View").gameObject;
-            dialougeParent.SetActive(false);
+            isTalking = false;
+            
+            dialouguePanel = transform.Find("Scroll View").gameObject;
+            dialouguePanel.SetActive(false);
 
             if (theManager == null)
             {
@@ -32,17 +39,23 @@ namespace Dialouge
             }
         }
 
+        // Lets load the NPC'S dialogue!
         public void LoadDialouge(Dialougue dialougue)
         {
-            Button spawnedButton;
+            isTalking = true;
             dialougeParent.SetActive(true);
             currentDialouge = dialougue;
             CleanUpButtons();
+
+            responseText.text = dialougue.greeting;
+            
             int i = 0;
             foreach (LineOfDialouge item in dialougue.dialougeOptions)
             {
-                {
-                    spawnedButton = Instantiate(buttonPrefab, buttonPanel).GetComponent<Button>();
+                float? currentApproval = FactionsManager.instance.FactionsApproval(dialougue.faction);
+                if(currentApproval != null && currentApproval > item.minApproval)
+                { 
+                    Button spawnedButton = Instantiate(buttonPrefab, buttonPanel).GetComponent<Button>();
                     spawnedButton.GetComponentInChildren<Text>().text = item.topic;
 
                     int j = i;
@@ -52,47 +65,43 @@ namespace Dialouge
             }
 
             //spawn the goodbye button.
-            spawnedButton = Instantiate(buttonPrefab, buttonPanel).GetComponent<Button>();
-            spawnedButton.GetComponentInChildren<Text>().text = dialougue.goodbye.topic;
-            spawnedButton.onClick.AddListener(EndConversation);
-
-            DisplayResponse(currentDialouge.greeting);
+            Button byeButton = Instantiate(buttonPrefab, buttonPanel).GetComponent<Button>();
+            byeButton.GetComponentInChildren<Text>().text = dialougue.goodbye.topic;
+            byeButton.onClick.AddListener(EndConversation);
+            
         }
 
         void EndConversation()
         {
-            CleanUpButtons();
             dialougeParent.SetActive(false);
-
-            DisplayResponse(currentDialouge.goodbye.response);
+            responseText.text = currentDialouge.goodbye.response;
 
             if(currentDialouge.goodbye.nextDialogue != null)
             {
-                LoadDialouge(currentDialouge.goodbye.nextDialogue);
+                LoadDialouge(currentDialouge = currentDialouge.goodbye.nextDialogue);
             }    
             else
             {
-                transform.GetChild(0).gameObject.SetActive(false);
+                CleanUpButtons();
+                dialouguePanel.SetActive(false);
+                isTalking = false;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = false;
             }    
         }
 
         void ButtonClicked(int dialougeNum)
         {
             FactionsManager.instance.FactionsApproval(currentDialouge.faction, currentDialouge.dialougeOptions[dialougeNum].changeApproval);
-
+            
+            
+            responseText.text = currentDialouge.dialougeOptions[dialougeNum].response;
             if(currentDialouge.dialougeOptions[dialougeNum].nextDialogue != null)
             {
                 LoadDialouge(currentDialouge.dialougeOptions[dialougeNum].nextDialogue);
             }
-            {
-                DisplayResponse(currentDialouge.dialougeOptions[dialougeNum].response);
-            }
         }
-
-        private void DisplayResponse(string response)
-        {
-            responseText.text = response;
-        }
+        
 
         void CleanUpButtons()
         {

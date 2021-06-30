@@ -1,8 +1,8 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Inventory
+namespace Player
 {
     public class Player : MonoBehaviour
     {
@@ -10,20 +10,19 @@ namespace Inventory
         {
             Helmet,
             Chestplate,
-            Plantaloons,
+            Pantaloons,
             Booties,
-            StabbyThingies,
-            ProtectyThingies
+            StabbyThings,
+            ProtectyThings
         }
-
-        private Dictionary<EquipmentSlot, EquipmentItem> slots = new Dictionary<EquipmentSlot, EquipmentItem>();
         
-        // Start is called before the first frame update
-        void Start()
+        private Dictionary<EquipmentSlot, EquipmentItem> slots = new Dictionary<EquipmentSlot, EquipmentItem>();
+
+        private void Start()
         {
-            foreach (EquipmentSlot slot in Enum.GetValues(typeof(EquipmentSlot)))
+            foreach (EquipmentSlot slot in System.Enum.GetValues(typeof(EquipmentSlot)))
             {
-                slots.Add(slot,null);
+                slots.Add(slot, null);
             }
         }
 
@@ -31,29 +30,20 @@ namespace Inventory
         {
             if (_toEquip == null)
             {
-                Debug.LogError("Why.. just why");
+                Debug.LogError("Why you nulled this... never do that!");
                 return null;
             }
-            // Attempt to get ANYTHING out of the slot, be it null or not
+
             if (slots.TryGetValue(_toEquip.slot, out EquipmentItem item))
             {
-                // Create a copy of the original, set the slot item to the to the passed value
+                // Making copies!
                 EquipmentItem original = item;
                 slots[_toEquip.slot] = _toEquip;
-                // Return what was originally in the slot to prevent loosing items when equipping
+                // return what was originally in the slot to prevent losing items when equipping
                 return original;
             }
-            
-            // SOMEHOW the slot didn't exist, so let's create it and return null as no item
-            // would be in the slot anyways
             slots.Add(_toEquip.slot, _toEquip);
             return null;
-        }
-        
-        // Update is called once per frame
-        void Update()
-        {
-        
         }
     }
 }

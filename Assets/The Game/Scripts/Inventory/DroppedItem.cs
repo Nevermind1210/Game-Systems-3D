@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace Inventory
+namespace Player
 {
     public class DroppedItem : MonoBehaviour
     {
-        public Items item;
+        public Item item;
     }
 }

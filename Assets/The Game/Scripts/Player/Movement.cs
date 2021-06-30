@@ -16,7 +16,7 @@ namespace Player
         [Header("Character")] public float moveSpeed;
         public float walkSpeed, runSpeed, crouchSpeed, jumpSpeed;
         public int baseSpeed;
-        [SerializeField] private Transform cam;
+       // [SerializeField] private Transform cam;
 
         [Header("Speed Variables")] public int staminaMax;
         public float stamina;
@@ -44,7 +44,7 @@ namespace Player
 
         private void Start()
         {
-            playerAnimator = GetComponent<Animator>();
+            playerAnimator = GetComponentInChildren<Animator>();
 
             SetStamValues();
         }
@@ -60,6 +60,25 @@ namespace Player
         void FixedUpdate()
         {
             isOnGround = GroundChecker();
+        }
+
+        private void Update()
+        {
+            GameMovement();
+            LevelUp();
+            
+            #region Stamina Bar update and regen
+            // Updates stamina slider and value text
+            staminaSlider.value = stamina;
+            stamText.text = "Stamina: " + Mathf.RoundToInt(stamina) + "/" + staminaMax;
+
+            if (stamina < staminaMax && !Input.GetButton("Sprint"))
+            {
+                // Regenerate stamina if not using it
+                stamina += Time.deltaTime;
+            }
+
+            #endregion
         }
 
         private bool GroundChecker()
@@ -78,8 +97,7 @@ namespace Player
             {
                 gravity = Vector3.down * 2f;
             }
-
-
+            
             if (BindingManager.BindingHeld("Forward"))
             {
                 rb.AddForce(transform.forward * moveSpeed + gravity);

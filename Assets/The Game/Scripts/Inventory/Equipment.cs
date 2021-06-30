@@ -2,44 +2,29 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace Inventory
+namespace Player
 {
-    [System.Serializable]
-    public struct EquipmentSlot
-    {
-        [SerializeField] private Items items;
-
-        public Items EquippedItem
-        {
-            get
-            {
-                return items;
-            }
-            set
-            {
-                items = value;
-                itemEquipped.Invoke(this);       
-            }
-        }
-
-        public Transform visualLocation;
-        public Vector3 offset;
-
-        public delegate void ItemEquipped(EquipmentSlot items);
-        public event ItemEquipped itemEquipped;
-    }
-
     public class Equipment : MonoBehaviour
     {
+        public static Equipment TheEquipment;
+
         public EquipmentSlot primary;
         public EquipmentSlot secondary;
         public EquipmentSlot defensive;
 
         private void Awake()
         {
-            primary.itemEquipped += EquipItem;
-            secondary.itemEquipped += EquipItem;
-            defensive.itemEquipped += EquipItem;
+            if (TheEquipment == null)
+            {
+                TheEquipment = this;
+            }
+            else
+                Destroy(this);
+
+            //adding this function to the equipmentslot set event.
+            primary.itemEquiped += EquipItem;
+            secondary.itemEquiped += EquipItem;
+            defensive.itemEquiped += EquipItem;
         }
 
         private void Start()
@@ -48,25 +33,26 @@ namespace Inventory
             EquipItem(secondary);
             EquipItem(defensive);
         }
-
-        public void EquipItem(EquipmentSlot items)
+        
+        public void EquipItem(EquipmentSlot item)
         {
-            if (items.visualLocation == null)
+            if (item.visualLocation == null)
             {
                 return;
             }
 
-            foreach (Transform child in items.visualLocation)
+            foreach (Transform transform in item.visualLocation)
             {
-                Destroy(child.gameObject);
+                GameObject.Destroy(transform.gameObject);
             }
 
-            if (items.EquippedItem.Mesh == null)
+            if (item.EquippedItem.Mesh == null)
             {
                 return;
             }
-            GameObject meshInstance = Instantiate(items.EquippedItem.Mesh, items.visualLocation);
-            meshInstance.transform.localPosition = items.offset;
+
+            GameObject meshInstance = Instantiate(item.EquippedItem.Mesh, item.visualLocation);
+            meshInstance.transform.localPosition = item.offset;
             OffsetLocation offset = meshInstance.GetComponent<OffsetLocation>();
             if (offset != null)
             {

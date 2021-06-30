@@ -40,5 +40,6 @@ public class LoadingSystem : MonoBehaviour
         }
 
         SceneManager.UnloadSceneAsync("Loading Screen");
+        SceneManager.UnloadSceneAsync("Loading Screen 1");
     }
 }

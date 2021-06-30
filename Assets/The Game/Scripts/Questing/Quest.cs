@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Plr;
+using Player;
 using UnityEngine;
 
 namespace Quests

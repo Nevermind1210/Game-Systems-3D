@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: f95ab82904d151c47a19475fcffa5fd7
+guid: f4f421fd26c7cf3469e3597860542c97
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
-    second: Idle
+    second: walking
   - first:
-      74: -6601093399316381666
-    second: Walking
+      74: -5252816984213320552
+    second: idle
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -38,11 +38,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Idle
+      name: walking
       takeName: Take 001
       internalID: 0
-      firstFrame: 0
-      lastFrame: 51
+      firstFrame: 53
+      lastFrame: 85
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -67,11 +67,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Walking
+      name: idle
       takeName: Take 001
       internalID: 0
-      firstFrame: 52
-      lastFrame: 85
+      firstFrame: 0
+      lastFrame: 50
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

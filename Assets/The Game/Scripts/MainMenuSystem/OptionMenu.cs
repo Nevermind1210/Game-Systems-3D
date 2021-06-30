@@ -72,7 +72,7 @@ public class OptionMenu : MonoBehaviour
     {
         PlayerPrefs.SetFloat("SFXVolume",volume);
         volume = VolumeRemapping(volume);
-        audioMixer.SetFloat("SFXVoume", volume);
+        audioMixer.SetFloat("SFXVolume", volume);
     }
 
     private float VolumeRemapping(float _value)

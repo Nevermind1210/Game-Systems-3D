@@ -41,6 +41,7 @@ namespace The_Game.Scripts.MainMenuSystem
         {
             amIPaused = false;
             Time.timeScale = 1;
+            pausePanel.SetActive(false);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = false;
         }

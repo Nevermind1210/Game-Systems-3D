@@ -38,7 +38,7 @@ namespace Quests
         [SerializeField] private Text questTitle;
         [SerializeField] private Text questDescription;
 
-        [SerializeField] private Plr.Inventory inventory;
+        [SerializeField] private Inventory inventory;
 
         
         private void Awake()

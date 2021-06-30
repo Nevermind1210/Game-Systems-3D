@@ -1,5 +1,4 @@
 using Dialouge;
-using Plr;
 using Quests;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +7,7 @@ namespace Player
 {
     public class PlayerInteract : MonoBehaviour
     {
-        [SerializeField] private Plr.Inventory inventory;
+        [SerializeField] private Inventory inventory;
         [SerializeField] private Text pickUpText;
         
         // Update is called once per frame
@@ -17,12 +16,12 @@ namespace Player
             if(Input.GetKeyDown(KeyCode.E))
             {
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.forward, out hit, 2))
+                if (Physics.Raycast(transform.position, transform.forward, out hit, 5))
                 {
                     if (hit.transform.tag == "NPC")
                     {
-                        Dialougue npcDialouge = hit.transform.GetComponent<Dialougue>();
-                        if (npcDialouge != null)
+                        Dialougue npcDialouge = hit.transform.GetComponents<Dialougue>()[0];
+                        if (npcDialouge)
                         {
                             DialougeManager.theManager.LoadDialouge(npcDialouge);
                             Cursor.lockState = CursorLockMode.None;

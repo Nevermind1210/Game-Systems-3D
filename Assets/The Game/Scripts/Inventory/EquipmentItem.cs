@@ -1,27 +1,28 @@
-using Inventory;
 using UnityEngine;
 
-namespace Inventory
+namespace Player
 {
-   [System.Serializable]
-   public class EquipmentItem : Items
-   {
-      public Player.EquipmentSlot slot = Player.EquipmentSlot.Booties;
-      
-      public bool isEquipped = false;
+    [System.Serializable]
+    public class EquipmentItem : Item
+    {
+        public Player.EquipmentSlot slot = Player.EquipmentSlot.Booties;
+        public bool isEquipped = false;
 
-      public override void OnClicked()
-      {
-         base.OnClicked();
+        public override void OnClicked()
+        {
+            base.OnClicked();
 
-         Player player = GameObject.FindObjectOfType<Player>();
-         EquipmentItem oldItem = player.EquipItem(this);
-         PlayerInventory inventory = GameObject.FindObjectOfType<PlayerInventory>();
-         if (oldItem != null)
-         {
-            inventory.AddItem(oldItem);
-         }
-         inventory.RemoveItem(this);
-      }
-   }
+            Player player = GameObject.FindObjectOfType<Player>();
+            EquipmentItem oldItem = player.EquipItem(this);
+            Inventory inventory = GameObject.FindObjectOfType<Inventory>();
+
+            if (oldItem != null)
+            {
+                inventory.AddItem(oldItem);
+            }
+
+            inventory.RemoveItem(this);
+        }
+
+    }
 }

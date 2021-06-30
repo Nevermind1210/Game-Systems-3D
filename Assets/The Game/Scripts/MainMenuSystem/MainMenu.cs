@@ -8,7 +8,7 @@ public class MainMenu : MonoBehaviour
     // this is all very self-explanatory.
     public void NewGame()
     {
-        SceneManager.LoadScene("Loading Screen");
+        SceneManager.LoadScene("Customization");
     }
     
     public void LoadGame()
