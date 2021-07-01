@@ -54,7 +54,7 @@ namespace Player
             staminaMax = CustomisationGet.stamina;
             staminaSlider.maxValue = staminaMax;
             stamina = staminaMax;
-
+            baseSpeed = CustomisationGet.speed / 2;
         }
 
         void FixedUpdate()
@@ -101,12 +101,14 @@ namespace Player
             if (BindingManager.BindingHeld("Forward"))
             {
                 rb.AddForce(transform.forward * moveSpeed + gravity);
+                transform.position += transform.forward * moveSpeed * Time.deltaTime;
                 playerAnimator.SetBool("moving", true);
             }
 
             if (BindingManager.BindingHeld("Right"))
             {
                 rb.AddForce(transform.right * moveSpeed + gravity);
+                transform.position += transform.right * moveSpeed * Time.deltaTime;
                 playerAnimator.SetBool("moving", true);
             }
 
@@ -114,6 +116,7 @@ namespace Player
             if (BindingManager.BindingHeld("Backward"))
             {
                 rb.AddForce(-transform.forward * moveSpeed + gravity);
+                transform.position -= transform.forward * moveSpeed * Time.deltaTime;
                 playerAnimator.SetBool("moving", true);
 
             }
@@ -121,6 +124,7 @@ namespace Player
             if (BindingManager.BindingHeld("Left"))
             {
                 rb.AddForce(-transform.right * moveSpeed + gravity);
+                transform.position -= transform.right * moveSpeed * Time.deltaTime;
                 playerAnimator.SetBool("moving", true);
             }
 
@@ -158,7 +162,7 @@ namespace Player
                 rb.AddForce(gravity, ForceMode.Acceleration);
             }
         }
-        
+
         public void LevelUp()
         {
             if (Input.GetButtonDown("LevelUp"))

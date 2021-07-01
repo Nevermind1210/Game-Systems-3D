@@ -1,12 +1,15 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace The_Game.Scripts.MainMenuSystem
 {
     public class PauseMenuController : MonoBehaviour
     {
-        [Header("Pause Panel")] 
+        [Header("UI Panels")] 
         [SerializeField] private GameObject pausePanel;
+        [SerializeField] private GameObject optionsPanel;
+        [SerializeField] private GameObject keybindsPanel;
         private bool amIPaused;
 
         private void Start()
@@ -42,6 +45,8 @@ namespace The_Game.Scripts.MainMenuSystem
             amIPaused = false;
             Time.timeScale = 1;
             pausePanel.SetActive(false);
+            optionsPanel.SetActive(false);
+            keybindsPanel.SetActive(false);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = false;
         }

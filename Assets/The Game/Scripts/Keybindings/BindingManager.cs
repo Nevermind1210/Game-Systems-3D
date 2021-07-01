@@ -124,6 +124,7 @@ namespace KeyBindings
         
         private void LoadBindings()
         {
+            //self explanatory basically looking at the list and then populating it inside the inspector and game
             foreach(Binding binding in bindngsList)
             {
                 binding.Load();
@@ -132,6 +133,7 @@ namespace KeyBindings
         
         public void SaveBindings()
         {
+            // Same thing as above
             foreach(Binding binding in bindngsList)
             {
                 binding.Save();

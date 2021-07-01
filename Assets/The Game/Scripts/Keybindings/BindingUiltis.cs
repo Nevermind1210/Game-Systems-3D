@@ -64,7 +64,7 @@ namespace KeyBindings
 
         public static void UpdateTextWithBinding(string _binding, TextMeshProUGUI _text)
         {
-            _text.text = BindingManager.GetBinding(_binding).ValueDisplay;
+             _text.text = BindingManager.GetBinding(_binding).ValueDisplay;
         }
     }
 }
