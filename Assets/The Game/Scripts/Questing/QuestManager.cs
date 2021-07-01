@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Player;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,7 @@ namespace Quests
 
         public List<Quest> quests = new List<Quest>();
 
-        private List<Quest> activeQuests = new List<Quest>();
+        public List<Quest> activeQuests = new List<Quest>();
         private Dictionary<string, Quest> questDatabase = new Dictionary<string, Quest>();
 
         public List<Quest> GetActiveQuests() => activeQuests;
@@ -27,28 +28,27 @@ namespace Quests
         [SerializeField] private GameObject questUIButtons;
         [SerializeField] private GameObject claimRewardButton;
         [SerializeField] private GameObject rewardPanel;
-        [SerializeField] private Text rewardText;
+        [SerializeField] private TextMeshProUGUI rewardText;
         [SerializeField] private GameObject requirementsMetText;
         [SerializeField] private GameObject cantAcceptQuestPanel;
-        [SerializeField] private Text cantAcceptQuestText;
+        [SerializeField] private TextMeshProUGUI cantAcceptQuestText;
         [SerializeField] private GameObject foundQuestItemPanel;
         [SerializeField] private Transform spawnLocation;
 
         [Header("Selected Quest Display")]
-        [SerializeField] private Text questTitle;
-        [SerializeField] private Text questDescription;
-
+        [SerializeField] private TextMeshProUGUI questTitle;
+        [SerializeField] private TextMeshProUGUI questDescription;
+        [SerializeField] private GameObject crosshairs;
         [SerializeField] private Inventory inventory;
 
         
         private void Awake()
         {
-            // If the instance isn't set, set it to this gameObject
+            // Singleton technique!
             if (instance == null)
             {
                 instance = this;
             }
-            // If the instance is already set and it isn't this, destroy this gameobject.
             else if (instance != this)
             {
                 Destroy(gameObject);
@@ -66,13 +66,14 @@ namespace Quests
             {
                 if (activeQuestsGameObject.activeSelf)
                 {
+                    crosshairs.SetActive(true);
                     activeQuestsGameObject.SetActive(false);
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = false;
                 }
                 else
                 {
-                    
+                    crosshairs.SetActive(false);
                     activeQuestsGameObject.SetActive(true);
                     DisplayActiveQuestsCanvas();
                     selectedQuest = null;
@@ -123,7 +124,7 @@ namespace Quests
                 else
                 {
                     cantAcceptQuestPanel.SetActive(true);
-                    cantAcceptQuestText.text = "You need to be level " + selectedQuest.requiredLevel.ToString() + " to accept this quest";
+                    cantAcceptQuestText.text = "You need to be level " + selectedQuest.requiredLevel.ToString() + " to accept this quest... psst cheat!!! press Q!!!";
                     Debug.Log("You need to be " + selectedQuest.requiredLevel.ToString() + " to accept this quest");
                 }
 
@@ -136,10 +137,12 @@ namespace Quests
         {
             if (activeQuestsGameObject.activeSelf)
             {
+                crosshairs.SetActive(true);
                 activeQuestsGameObject.SetActive(false);
             }
             else
             {
+                crosshairs.SetActive(false);
                 activeQuestsGameObject.SetActive(true);
                 //Set the buttons visable when accessing quests from the quest board
                 questUIButtons.SetActive(true);

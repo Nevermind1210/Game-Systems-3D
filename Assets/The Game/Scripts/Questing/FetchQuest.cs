@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace Quests
 {
-    public class FetchQuest : MonoBehaviour
+    public class FetchQuest : Quest
     {
         public bool gotItem = false;
 
-        public bool CheckQuestCompletion()
+        public override bool CheckQuestCompletion()
         {
             if (gotItem)
             {

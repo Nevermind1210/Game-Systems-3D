@@ -11,23 +11,23 @@ namespace Dialouge
     {
         [SerializeField] GameObject buttonPrefab;
         [SerializeField] Transform buttonPanel;
-        [SerializeField] GameObject dialougeParent;
+        [SerializeField] GameObject responsePanel;
         [SerializeField] TextMeshProUGUI responseText;
+        [SerializeField] private GameObject crosshairs;
 
-        public static bool isTalking;
-        
+        public static bool isTalking = false;
+
+        GameObject dialoguePanel;
+
+        Dialougue currentDialogue;
+
         public static DialougeManager theManager;
-
-        GameObject dialouguePanel;
-        
-        Dialougue currentDialouge;
-
         private void Awake()
         {
             isTalking = false;
             
-            dialouguePanel = transform.Find("Scroll View").gameObject;
-            dialouguePanel.SetActive(false);
+            dialoguePanel = transform.Find("Scroll View").gameObject;
+            dialoguePanel.SetActive(false);
 
             if (theManager == null)
             {
@@ -41,11 +41,13 @@ namespace Dialouge
 
         // Lets load the NPC'S dialogue!
         public void LoadDialouge(Dialougue dialougue)
-        {
+        { 
             isTalking = true;
-            dialougeParent.SetActive(true);
-            currentDialouge = dialougue;
+            crosshairs.SetActive(false);
+            dialoguePanel.SetActive(true);
+            responsePanel.SetActive(true);
             CleanUpButtons();
+            currentDialogue = dialougue;
 
             responseText.text = dialougue.greeting;
             
@@ -73,32 +75,33 @@ namespace Dialouge
 
         void EndConversation()
         {
-            dialougeParent.SetActive(false);
-            responseText.text = currentDialouge.goodbye.response;
-
-            if(currentDialouge.goodbye.nextDialogue != null)
+            responsePanel.SetActive(true);
+            responseText.text = currentDialogue.goodbye.response;
+                        
+            if(currentDialogue.goodbye.nextDialogue != null)
             {
-                LoadDialouge(currentDialouge = currentDialouge.goodbye.nextDialogue);
-            }    
+                LoadDialouge(currentDialogue = currentDialogue.goodbye.nextDialogue);
+            }
             else
             {
                 CleanUpButtons();
-                dialouguePanel.SetActive(false);
+                dialoguePanel.SetActive(false);
+                crosshairs.SetActive(true);
                 isTalking = false;
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = false;
-            }    
+            }
         }
 
         void ButtonClicked(int dialougeNum)
         {
-            FactionsManager.instance.FactionsApproval(currentDialouge.faction, currentDialouge.dialougeOptions[dialougeNum].changeApproval);
+            FactionsManager.instance.FactionsApproval(currentDialogue.faction, currentDialogue.dialougeOptions[dialougeNum].changeApproval);
             
-            
-            responseText.text = currentDialouge.dialougeOptions[dialougeNum].response;
-            if(currentDialouge.dialougeOptions[dialougeNum].nextDialogue != null)
+            responsePanel.SetActive(true);
+            responseText.text = currentDialogue.dialougeOptions[dialougeNum].response;
+            if (currentDialogue.dialougeOptions[dialougeNum].nextDialogue != null)
             {
-                LoadDialouge(currentDialouge.dialougeOptions[dialougeNum].nextDialogue);
+                LoadDialouge(currentDialogue = currentDialogue.dialougeOptions[dialougeNum].nextDialogue);
             }
         }
         
@@ -110,6 +113,5 @@ namespace Dialouge
                 Destroy(child.gameObject);
             }
         }
-
     }
 }

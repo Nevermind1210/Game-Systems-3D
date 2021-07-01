@@ -29,15 +29,15 @@ namespace Player
                         }
                     }
 
-                    if (hit.transform.tag == "Quest Board")
+                    if (hit.transform.tag == "QuestBoard")
                     {
-                        Quests.QuestManager.instance.LoadQuests();
+                        QuestManager.instance.LoadQuests();
                         Cursor.lockState = CursorLockMode.None;
                         Cursor.visible = true;
                     }
                 }
                 
-                if (Physics.SphereCast(transform.position, 1f, transform.forward, out hit, 5f))
+                if (Physics.SphereCast(transform.position, 5f, transform.forward, out hit, 5f))
                 {
                     FetchQuestItem fetchQuest = hit.collider.gameObject.GetComponent<FetchQuestItem>();
                     DroppedItem droppedItem = hit.collider.gameObject.GetComponent<DroppedItem>();
@@ -47,10 +47,9 @@ namespace Player
                         {
                             fetchQuest.UpdateQuest();
                         }
-                        pickUpText.text = "Picked up a " + droppedItem.name.Substring(0, droppedItem.name.Length - 7); // Can I trim the (Clone) off the end of the name?
+                        pickUpText.text = "Picked up a " + droppedItem.name.Substring(0, droppedItem.name.Length - 7); 
                         inventory.AddItem(droppedItem.item);
                         Destroy(hit.collider.gameObject);
-
                     }
                 }
             }
