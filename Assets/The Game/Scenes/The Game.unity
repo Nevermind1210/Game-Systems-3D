@@ -3298,7 +3298,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000002586722}
+  m_AnchoredPosition: {x: 0, y: 0.00063276314}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &626511878
@@ -6462,7 +6462,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1874212259}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999803
+  m_Size: 0.76988256
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13268,8 +13268,8 @@ GameObject:
   - component: {fileID: 1719145618}
   - component: {fileID: 1719145621}
   - component: {fileID: 1719145620}
-  - component: {fileID: 1719145619}
   - component: {fileID: 1719145622}
+  - component: {fileID: 1719145619}
   m_Layer: 5
   m_Name: DEATH
   m_TagString: Untagged
@@ -13306,7 +13306,7 @@ Animator:
   m_GameObject: {fileID: 1719145617}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f40ddd34ff08e83478550153eeaa91f9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

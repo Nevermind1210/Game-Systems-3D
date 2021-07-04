@@ -35,7 +35,7 @@ public class OptionMenu : MonoBehaviour
     {
         #region Resolution Start
         resolutionDropdown.ClearOptions();
-        List<string> options = new List<string>();
+        List<string> resOptions = new List<string>();
         resolutions = Screen.resolutions;
         int currentResolutionIndex = 0;
 
@@ -43,7 +43,7 @@ public class OptionMenu : MonoBehaviour
         {
             string option = resolutions[i].width + " x " +
                             resolutions[i].height;
-            options.Add(option);
+            resOptions.Add(option);
             if (resolutions[i].width == Screen.currentResolution.width
                 && resolutions[i].height == Screen.currentResolution.height)
             {
@@ -51,12 +51,25 @@ public class OptionMenu : MonoBehaviour
             }
         }
 
-        resolutionDropdown.AddOptions(options);
-        resolutionDropdown.RefreshShownValue();
-
+        resolutionDropdown.AddOptions(resOptions);
+        if (PlayerPrefs.HasKey("Resolution"))
+        {
+            int resIndex = PlayerPrefs.GetInt("Resolution");
+            resolutionDropdown.value = resIndex;
+            resolutionDropdown.RefreshShownValue();
+            SetResolution(resIndex);
+        }
+        else
+        {
+            resolutionDropdown.value = currentResolutionIndex;
+            resolutionDropdown.RefreshShownValue();
+        }
         #endregion
-     
-        LoadSettings(currentResolutionIndex);
+    }
+
+    private void Start()
+    {
+        LoadSettings();
     }
 
     #region Volume Stuff
@@ -85,69 +98,84 @@ public class OptionMenu : MonoBehaviour
 
     public void SetFullScreen(bool isFullscreen)
     {
+        PlayerPrefs.SetInt("Fullscreen",(isFullscreen ? 1 : 0));
         Screen.fullScreen = isFullscreen;
     }
 
     public void SetResolution(int resolutionIndex)
     {
+        PlayerPrefs.SetInt("Resolution", resolutionIndex);
         Resolution resolution = resolutions[resolutionIndex];
-        Screen.SetResolution(resolution.width,
-            resolution.height, Screen.fullScreen);
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
     public void SetTextureQuality(int textureIndex)
     {
         QualitySettings.masterTextureLimit = textureIndex;
         qualityDropdown.value = 6;
+        PlayerPrefs.SetInt("TextureQuality", textureIndex);
     }
-    
-    public void SaveSettings()
+    public void SetQuality(int qualityIndex)
     {
-        PlayerPrefs.SetInt("QualitySettingPreference",
-            qualityDropdown.value);
-        PlayerPrefs.SetInt("ResolutionPreference",
-            resolutionDropdown.value);
-        PlayerPrefs.SetInt("TextureQualityPreference",
-            textureDropdown.value);
-        PlayerPrefs.SetInt("FullscreenPreference",
-            Convert.ToInt32(Screen.fullScreen));
-        PlayerPrefs.SetFloat("VolumePreference",
-            currentVolume);
+        QualitySettings.SetQualityLevel(qualityIndex);
+        PlayerPrefs.SetInt("Quality", qualityIndex);
     }
 
-    public void LoadSettings(int currentResolutionIndex)
+    private void LoadSettings()
     {
-        if (PlayerPrefs.HasKey("QualitySettingPreference"))
-            qualityDropdown.value =
-                PlayerPrefs.GetInt("QualitySettingPreference");
-        else
-            qualityDropdown.value = 3;
-        if (PlayerPrefs.HasKey("ResolutionPreference"))
-            resolutionDropdown.value =
-                PlayerPrefs.GetInt("ResolutionPreference");
-        else
-            resolutionDropdown.value = currentResolutionIndex;
-        if (PlayerPrefs.HasKey("TextureQualityPreference"))
-            textureDropdown.value =
-                PlayerPrefs.GetInt("TextureQualityPreference");
-        else
-            textureDropdown.value = 0;
-        if (PlayerPrefs.HasKey("FullscreenPreference"))
-            Screen.fullScreen =
-                Convert.ToBoolean(PlayerPrefs.GetInt("FullscreenPreference"));
-        else
-            Screen.fullScreen = true;
-        if (PlayerPrefs.HasKey("VolumePreference"))
-            masterVolume.value =
-                PlayerPrefs.GetFloat("VolumePreference");
-        else
-            masterVolume.value =
-                PlayerPrefs.GetFloat("VolumePreference");
+        if (PlayerPrefs.HasKey("Resolution"))
+        {
+            int resIndex = PlayerPrefs.GetInt("Resolution");
+            resolutionDropdown.value = resIndex;
+            resolutionDropdown.RefreshShownValue();
+            SetResolution(resIndex);
+
+        }
+        
+        if (PlayerPrefs.HasKey("Quality"))
+        {
+            int quality = PlayerPrefs.GetInt("Quality");
+            qualityDropdown.value = quality;
+            SetTextureQuality(quality);
+        }
+
+        if (PlayerPrefs.HasKey("TextureQuality"))
+        {
+            int textureQuality = PlayerPrefs.GetInt("TextureQuality");
+            textureDropdown.value = textureQuality;
+            SetTextureQuality(textureQuality);
+        }
+
+        if (PlayerPrefs.HasKey("MasterVolume"))
+        {
+            float volume = PlayerPrefs.GetFloat("MasterVolume");
+            masterVolume.value = volume;
+            SetMasterVolume(volume);
+        }
+
         if (PlayerPrefs.HasKey("SFXVolume"))
-            sfxVolumeSlider.value =
-                PlayerPrefs.GetFloat("SFXVolume");
-        else
-            sfxVolumeSlider.value = 
-                PlayerPrefs.GetFloat("SFXVolume");
+        {
+            float sfxVolume = PlayerPrefs.GetFloat("SFXVolume");
+            sfxVolumeSlider.value = sfxVolume;
+            SFXVolume(sfxVolume);
+        }
+
+        if (PlayerPrefs.HasKey("Fullscreen"))
+        {
+            bool _fullscreen = true;
+            int fullscreen = PlayerPrefs.GetInt("Fullscreen");
+            if (fullscreen == 1)
+            {
+                fullscreenToggle.isOn = true;
+            }
+            else if (fullscreen == 0)
+            {
+                _fullscreen = false;
+                fullscreenToggle.isOn = false;
+            }
+
+            SetFullScreen(_fullscreen);
+
+        }
     }
 }

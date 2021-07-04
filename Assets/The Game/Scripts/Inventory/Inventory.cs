@@ -424,6 +424,10 @@ namespace Player
             GUI.EndScrollView();
         }
 
+        public void ShowIMGUI()
+        {
+            showIMGUIInventory = true;
+        }
         #endregion
     }
 }
