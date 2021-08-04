@@ -416,7 +416,6 @@ namespace Player
                         selectedItem = inventory[i];
                         selectedItem.OnClicked();
                     }
-
                     count++;
                 }
             }

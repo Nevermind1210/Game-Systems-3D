@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Faction;
 using TMPro;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
+using Cursor = UnityEngine.Cursor;
 
 namespace Dialouge
 {
@@ -14,6 +17,7 @@ namespace Dialouge
         [SerializeField] GameObject responsePanel;
         [SerializeField] TextMeshProUGUI responseText;
         [SerializeField] private GameObject crosshairs;
+        [SerializeField] private GameObject view;
 
         public static bool isTalking = false;
 
@@ -25,8 +29,8 @@ namespace Dialouge
         private void Awake()
         {
             isTalking = false;
-            
-            dialoguePanel = transform.Find("Scroll View").gameObject;
+
+            dialoguePanel = view;
             dialoguePanel.SetActive(false);
 
             if (theManager == null)
@@ -69,8 +73,7 @@ namespace Dialouge
             //spawn the goodbye button.
             Button byeButton = Instantiate(buttonPrefab, buttonPanel).GetComponent<Button>();
             byeButton.GetComponentInChildren<Text>().text = dialougue.goodbye.topic;
-            byeButton.onClick.AddListener(EndConversation);
-            
+            byeButton.onClick.AddListener(delegate { EndConversation() ; });
         }
 
         void EndConversation()
